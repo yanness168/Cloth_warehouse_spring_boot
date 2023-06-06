@@ -1,4 +1,6 @@
-package.com.cloth_warehouse.assignment1.controllers;
+package com.cloth_warehouse.assignment_1.controllers;
+
+import java.util.EnumSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,9 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cloth_warehouse.assignment1.models.Clothe;
-import com.cloth_warehouse.assignment1.models.Clothe.Brand;
-import com.cloth_warehouse.assignment1.repository.impl.JdbcClotheRepository;
+import com.cloth_warehouse.assignment_1.models.Clothe;
+import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FormController {
 
     // @Autowired
-    // private JdbcClotheRepository clothesRepository;
+    // private JdbcClothesRepository clothesRepository;
 
     @GetMapping
     public String clothesForm() { return "clothesForm"; }
@@ -31,13 +32,13 @@ public class FormController {
     public Clothe clothe() {
         return Clothe
                 .builder()
-                .build()
+                .build();
     }
 
     @ModelAttribute
     public void brands(Model model) {
         var brandTypes = EnumSet.allOf(Brand.class);
-        model.addAttribute("brandTypes", brandTypes)
+        model.addAttribute("brandTypes", brandTypes);
     }
 
     @PostMapping
@@ -45,11 +46,11 @@ public class FormController {
                                                BindingResult result) {
         if (result.hasErrors()) {
             System.out.println(result);
-            return "clothesForm"
+            return "clothesForm";
         }
-        System.out.println("Processed clothes item: {}", clothe);
-        clothesRepository.save(clothe);
-        return "redirect:/clothesForm"
+        // System.out.println("Processed clothes item: {}", clothe);
+        // clothesRepository.save(clothe);
+        return "redirect:/clothesForm";
     }
 }
 

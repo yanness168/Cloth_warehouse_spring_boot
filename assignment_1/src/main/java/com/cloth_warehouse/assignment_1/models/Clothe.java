@@ -8,6 +8,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -28,13 +29,13 @@ public class Clothe {
         ARITZIA("Aritzia"),
         ADIDAS("Adidas");
 
-        private String title;
+        private String name;
 
         private Brand(String name) {
             this.name = name;
         }
 
-        public getName() {
+        public String getName() {
             return name;
         }
     }
