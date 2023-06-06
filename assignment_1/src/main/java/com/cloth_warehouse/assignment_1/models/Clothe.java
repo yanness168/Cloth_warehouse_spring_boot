@@ -6,6 +6,7 @@ import java.util.Date;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,8 +32,8 @@ public class Clothe {
     @DecimalMin(value = "1000", message = "Price must be at most 1000")
     private BigDecimal price;
 
-    @CreatedDate
-    private Date createdAt = new Date();
+//    @CreatedDate
+//    private Date createdAt = new Date();
 
     public enum Brand {
         NIKE("Nike"),
@@ -41,7 +42,6 @@ public class Clothe {
         ZARA("Zara"),
         ARITZIA("Aritzia"),
         ADIDAS("Adidas");
-
         private final String title;
 
         private Brand(String title) {

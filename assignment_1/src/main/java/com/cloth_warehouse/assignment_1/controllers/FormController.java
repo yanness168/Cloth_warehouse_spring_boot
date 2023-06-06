@@ -1,5 +1,5 @@
 package com.cloth_warehouse.assignment_1.controllers;
-
+import java.util.EnumSet;
 import com.cloth_warehouse.assignment_1.models.ClothesInventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,18 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import jakarta.validation.Valid;
 import com.cloth_warehouse.assignment_1.models.Clothe;
 import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.EnumSet;
 
 @Controller
 @Slf4j
 @RequestMapping("/clothesForm")
 public class FormController {
-
     private final ClothesInventory cp;
 
     @Autowired
