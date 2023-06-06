@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cloth_warehouse.assignment_1.models.Clothe;
 import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
-import com.cloth_warehouse.assignment_1.repository.impl.JdbcClothesRepository;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
