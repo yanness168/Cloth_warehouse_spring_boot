@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/clothesForm")
 public class FormController {
 
-    @Autowired
-    private JdbcClotheRepository clothesRepository;
+    // @Autowired
+    // private JdbcClotheRepository clothesRepository;
 
     @GetMapping
     public String clothesForm() { return "clothesForm"; }
@@ -34,10 +34,17 @@ public class FormController {
                 .build()
     }
 
+    @ModelAttribute
+    public void brands(Model model) {
+        var brandTypes = EnumSet.allOf(Brand.class);
+        model.addAttribute("brandTypes", brandTypes)
+    }
+
     @PostMapping
     public String validateClotheFormSubmission(@Valid Clothe clothe,
                                                BindingResult result) {
         if (result.hasErrors()) {
+            System.out.println(result);
             return "clothesForm"
         }
         System.out.println("Processed clothes item: {}", clothe);
