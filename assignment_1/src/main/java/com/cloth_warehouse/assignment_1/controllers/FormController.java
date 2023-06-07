@@ -26,7 +26,7 @@ public class FormController {
     }
 
     @GetMapping
-    public String clothesForm() { return "clothesForm"; }
+    public String clothesForm(Clothe clothe) { return "clothesForm"; }
 
     @ModelAttribute
     public Clothe clothe() {

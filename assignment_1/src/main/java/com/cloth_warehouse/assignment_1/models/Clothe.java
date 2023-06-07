@@ -6,6 +6,7 @@ import java.util.Date;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Data;
@@ -26,22 +27,24 @@ public class Clothe {
 
     private Brand brand;
 
+    @NotNull(message = "Establishment year is required")
     @Min(value = 2021, message = "Establishment year must be more than 2021")
     private int establishmentYear;
 
-    @DecimalMin(value = "1000", message = "Price must be at most 1000")
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "1000.0", message = "Price must be more than 1000")
     private BigDecimal price;
 
 //    @CreatedDate
 //    private Date createdAt = new Date();
 
     public enum Brand {
-        NIKE("Nike"),
-        LEVI("Levi"),
-        UNIQLO("Uniqlo"),
-        ZARA("Zara"),
-        ARITZIA("Aritzia"),
-        ADIDAS("Adidas");
+        Nike("Nike"),
+        Levi("Levi"),
+        Uniqlo("Uniqlo"),
+        Zara("Zara"),
+        Aritzia("Aritzia"),
+        Adidas("Adidas");
         private final String title;
 
         private Brand(String title) {
