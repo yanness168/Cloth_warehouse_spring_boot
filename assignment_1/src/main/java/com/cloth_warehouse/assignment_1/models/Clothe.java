@@ -14,10 +14,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Table("CLOTHES")
 @Data
 @Builder
+@Entity
 public class Clothe {
     @Id
     private Integer id;
