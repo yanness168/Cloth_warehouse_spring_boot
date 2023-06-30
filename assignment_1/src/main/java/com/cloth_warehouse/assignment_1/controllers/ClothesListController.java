@@ -1,5 +1,6 @@
 package com.cloth_warehouse.assignment_1.controllers;
 
+import java.util.EnumSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -11,11 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cloth_warehouse.assignment_1.models.dto.ClothesBrandDateDto;
 import com.cloth_warehouse.assignment_1.repository.ClothesRepository;
 import com.cloth_warehouse.assignment_1.repository.ClothesRepositoryPaginated;
+import com.cloth_warehouse.assignment_1.models.Clothe;
+import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
+
 
 @Controller
 @RequestMapping("/clothesList")
@@ -47,12 +52,25 @@ public class ClothesListController {
         model.addAttribute("clothesByBrandDate", new ClothesBrandDateDto());
     }
 
-    @PostMapping
+    @ModelAttribute
+    public void brands(Model model) {
+        var brandTypes = EnumSet.allOf(Brand.class);
+        model.addAttribute("brandTypes", brandTypes);
+    }
+
+    @RequestMapping(value={"/filterByBrand"}, method=RequestMethod.POST, params="brandFilter")
     public String searchClothesByBrandDate(@ModelAttribute ClothesBrandDateDto clothesBrandDateDto,
                                            Model model) {
         model.addAttribute("clothes",
                 clothesRepository.findByBrandAndEstablishmentYear(clothesBrandDateDto.getBrand(), 2022));
 
+        return "clothesList";
+    }
+
+    @RequestMapping(value={"/sortByBrand"}, method=RequestMethod.POST, params="brandSorted")
+    public String sortByClothesBrand(Model model) {
+        model.addAttribute("clothes",
+                clothesRepository.findByOrderByBrandDesc());
         return "clothesList";
     }
 

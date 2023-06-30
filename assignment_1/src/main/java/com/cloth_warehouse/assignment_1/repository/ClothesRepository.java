@@ -11,4 +11,6 @@ import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
 public interface ClothesRepository extends CrudRepository<Clothe, Long> {
 
     List<Clothe> findByBrandAndEstablishmentYear(Brand brand, int establishmentYear);
+
+    List<Clothe> findByOrderByBrandDesc();
 }
