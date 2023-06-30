@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.cloth_warehouse.assignment_1.model.dto.ClothesBrandDateDto;
+import com.cloth_warehouse.assignment_1.models.dto.ClothesBrandDateDto;
 import com.cloth_warehouse.assignment_1.repository.ClothesRepository;
 import com.cloth_warehouse.assignment_1.repository.ClothesRepositoryPaginated;
 
@@ -32,7 +32,7 @@ public class ClothesListController {
     }
 
     @GetMapping
-    public String showClothes(Model model) { return "clothesList" }
+    public String showClothes(Model model) { return "clothesList"; }
 
     @ModelAttribute
     public void clothes(Model model) {
@@ -44,14 +44,14 @@ public class ClothesListController {
 
     @ModelAttribute
     public void clothesByBrandDate(Model model) {
-        model.addAtribute("clothesByBrandDate", new ClothesBrandDateDto());
+        model.addAttribute("clothesByBrandDate", new ClothesBrandDateDto());
     }
 
     @PostMapping
     public String searchClothesByBrandDate(@ModelAttribute ClothesBrandDateDto clothesBrandDateDto,
                                            Model model) {
         model.addAttribute("clothes",
-                clothesRepository.findByBrandAndEstablishmentYear(clothesBrandDateDto.getBrand(), 2022);
+                clothesRepository.findByBrandAndEstablishmentYear(clothesBrandDateDto.getBrand(), 2022));
 
         return "clothesList";
     }

@@ -1,9 +1,14 @@
 package com.cloth_warehouse.assignment_1.repository;
 
-import com.cloth_warehouse.assignment_1.models.Clothe;
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
-public interface ClothesRepository extends CrudRepository<Clothe, Integer> {
+import com.cloth_warehouse.assignment_1.models.Clothe;
+import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
 
-    List<Clothe> findByBrandAndEstablishmentYear(String brand, establishmentYear year)
+
+public interface ClothesRepository extends CrudRepository<Clothe, Long> {
+
+    List<Clothe> findByBrandAndEstablishmentYear(Brand brand, int establishmentYear);
 }
