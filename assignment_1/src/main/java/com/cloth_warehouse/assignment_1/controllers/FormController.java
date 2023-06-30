@@ -51,7 +51,7 @@ public class FormController {
 
         System.out.println("Processed clothes item: {}" + clothe);
         cp.saveClothe(clothe);
-        return "redirect:/clothesForm";
+        return "redirect:/clothesList";
     }
 }
 
