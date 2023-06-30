@@ -1,6 +1,6 @@
 package com.cloth_warehouse.assignment_1.controllers;
 import java.util.EnumSet;
-import com.cloth_warehouse.assignment_1.models.ClothesInventory;
+import com.cloth_warehouse.assignment_1.repository.ClothesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/clothesForm")
 public class FormController {
-    private final ClothesInventory cp;
 
     @Autowired
-    private FormController(ClothesInventory cp) {
-        this.cp = cp;
-    }
+    private ClothesRepository clothesRepository;
 
     @GetMapping
     public String clothesForm(Clothe clothe) { return "clothesForm"; }
@@ -50,8 +47,8 @@ public class FormController {
         }
 
         System.out.println("Processed clothes item: {}" + clothe);
-        cp.saveClothe(clothe);
-        return "redirect:/clothesForm";
+        clothesRepository.save(clothe);
+        return "redirect:/clothesList";
     }
 }
 
