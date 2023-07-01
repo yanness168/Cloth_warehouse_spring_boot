@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Sort;
 
 import com.cloth_warehouse.assignment_1.models.dto.ClothesBrandDateDto;
 import com.cloth_warehouse.assignment_1.repository.ClothesRepository;
@@ -69,8 +71,10 @@ public class ClothesListController {
 
     @RequestMapping(value={"/sortByBrand"}, method=RequestMethod.POST, params="brandSorted")
     public String sortByClothesBrand(Model model) {
-        model.addAttribute("clothes",
-                clothesRepository.findByOrderByBrandDesc());
+
+        List<Clothe> clothes = clothesRepository.findByOrderByBrandDesc(Sort.by(Sort.Direction.ASC, "brand"));
+
+        model.addAttribute("clothes", clothes);
         return "clothesList";
     }
 

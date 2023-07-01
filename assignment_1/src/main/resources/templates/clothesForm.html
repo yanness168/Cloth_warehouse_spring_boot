@@ -13,11 +13,7 @@
         <title>Add your clothes</title>
     </head>
     <body>
-        <div style="display:flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            margin: 5% 10%">
+        <div style="container">
             <h1>Clothes Form</h1>
             <form action="/clothesForm" th:object="${clothe}"  method="POST">
                 <div th:if="${#fields.hasErrors()}" class="alert alert-warning">

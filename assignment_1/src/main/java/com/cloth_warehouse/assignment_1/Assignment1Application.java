@@ -30,17 +30,38 @@ public class Assignment1Application {
 					.build());
 
 			repository.save(Clothe.builder()
-					.name("Jacket")
+					.name("Jean Jacket")
 					.brand(Clothe.Brand.Levi)
 					.establishmentYear(2022)
 					.price(new BigDecimal("3123.26"))
 					.build());
 
 			repository.save(Clothe.builder()
-					.name("T-shirt2")
+					.name("Long Sleeve Shirt")
 					.brand(Clothe.Brand.Uniqlo)
 					.establishmentYear(2021)
 					.price(new BigDecimal("2123.12"))
+					.build());
+
+			repository.save(Clothe.builder()
+					.name("Running Shoes")
+					.brand(Clothe.Brand.Nike)
+					.establishmentYear(2022)
+					.price(new BigDecimal("2033.22"))
+					.build());
+
+			repository.save(Clothe.builder()
+					.name("Wind Breaker")
+					.brand(Clothe.Brand.Nike)
+					.establishmentYear(2022)
+					.price(new BigDecimal("2222.22"))
+					.build());
+
+			repository.save(Clothe.builder()
+					.name("Skirt")
+					.brand(Clothe.Brand.Zara)
+					.establishmentYear(2022)
+					.price(new BigDecimal("4032.50"))
 					.build());
 		};
 	}

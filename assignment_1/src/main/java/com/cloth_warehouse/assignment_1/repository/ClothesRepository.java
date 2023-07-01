@@ -6,11 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.cloth_warehouse.assignment_1.models.Clothe;
 import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
+import org.springframework.data.domain.Sort;
 
 
 public interface ClothesRepository extends CrudRepository<Clothe, Long> {
 
     List<Clothe> findByBrandAndEstablishmentYear(Brand brand, int establishmentYear);
 
-    List<Clothe> findByOrderByBrandDesc();
+    List<Clothe> findByOrderByBrandDesc(Sort sort);
 }
