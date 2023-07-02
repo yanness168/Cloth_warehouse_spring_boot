@@ -90,6 +90,7 @@ public class ClothesListController {
         var clothesPage = clothesRepositoryPaginated.findAll(PageRequest.of(pageToSwitch.orElse(0),
                 PAGE_SIZE));
         model.addAttribute("clothes", clothesPage.getContent());
+        model.addAttribute("totalPages", clothesPage.getTotalPages());
         model.addAttribute("currentPage", clothesPage.getNumber());
         return "clothesList";
     }
