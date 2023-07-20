@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,4 +97,24 @@ public class ClothesListController {
         return "clothesList";
     }
 
+    @PostMapping("/deleteCloth")
+    public String deleteCloth(@RequestParam("clothId") Long clothId, Model model) {
+        // Check if the user has the "ADMIN" role
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the "ADMIN" role, proceed with deleting the cloth
+            try {
+                clothesRepository.deleteById(clothId);
+            } catch (IllegalArgumentException e) {
+                model.addAttribute("errorMessage", "Failed to delete the cloth. Invalid cloth ID.");
+            }
+        } else {
+            // User does not have the "ADMIN" role, display an error message
+            model.addAttribute("errorMessage", "You are not authorized to delete clothes.");
+        }
+
+        // Redirect back to the clothes list page
+        return "redirect:/clothesList";
+    }
 }

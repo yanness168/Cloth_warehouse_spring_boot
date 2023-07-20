@@ -18,22 +18,20 @@
             <h1 class="container center-item">Clothes Store</h1>
             <!-- Clothes List -->
             <div class="d-flex flex-row mb-3">
-                <div class="card-columns ms-3 me-3"
-                     th:each="clothe: ${clothes}"
-                     style="min-width: 200px"
-                >
+                <div class="card-columns ms-3 me-3" th:each="clothe: ${clothes}" style="min-width: 200px">
                     <div class="card">
                         <div class="card-body shadow">
-                            <h5 class="card-title" th:text="${clothe.name}"/>
-                            <h6 class="card-subtitle mb-2 text-muted"
-                                th:text="|Brand: ${clothe.brand}|"
-                            />
-                            <h6 class="card-subtitle mb-2 text-muted"
-                                th:text="|Establishment Year: ${clothe.establishmentYear}|"
-                            />
-                            <h6 class="card-subtitle mb-2 text-muted"
-                                th:text="|Price: $ ${clothe.price}|"
-                            />
+                            <h5 class="card-title" th:text="${clothe.name}"></h5>
+                            <h6 class="card-subtitle mb-2 text-muted" th:text="|Brand: ${clothe.brand}|"></h6>
+                            <h6 class="card-subtitle mb-2 text-muted" th:text="|Establishment Year: ${clothe.establishmentYear}|"></h6>
+                            <h6 class="card-subtitle mb-2 text-muted" th:text="|Price: $ ${clothe.price}|"></h6>
+                            <form method="POST" th:action="@{/clothesList/deleteCloth}" th:object="${clothe}">
+                                <input type="hidden" name="clothId" th:value="${clothe.id}" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                            <p th:text="${errorMessage}"></p>
                         </div>
                     </div>
                 </div>
