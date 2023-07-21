@@ -37,10 +37,12 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests()
                 .requestMatchers(toH2Console()).permitAll()
-                .requestMatchers("/clothesForm","/clothesList")
+                .requestMatchers("/clothesList")
                 .hasAnyRole("USER", "ADMIN","EMPLOYEE")
                 .requestMatchers("/manage")
                 .hasRole("EMPLOYEE")
+                .requestMatchers("/clothesForm")
+                .hasAnyRole("ADMIN","EMPLOYEE")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
