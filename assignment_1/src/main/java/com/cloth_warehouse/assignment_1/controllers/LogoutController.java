@@ -10,7 +10,12 @@ public class LogoutController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) throws ServletException {
         request.logout();
-        return "redirect:/";
+        return "redirect:/log_out/success";
+    }
+
+    @GetMapping("/log_out/success")
+    public String showLogoutSuccessPage() {
+        return "logout";
     }
 }
 
