@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/manage")
 public class ManagementController {
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public String showManagementPage(@AuthenticationPrincipal User user) {
-        if (!user.getRole().contains("EMPLOYEE")) {
+        if (!user.getRole().contains("ADMIN")) {
             return "access-denied";
         }
 

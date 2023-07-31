@@ -3,45 +3,57 @@
       xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Log In</title>
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-            crossorigin="anonymous"
-    />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-<div
-        class="d-flex flex-column bd-highlight justify-content-center align-items-center w-75 ms-5"
->
-    <h1>Login</h1>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div style="display:flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 80vh;">
+        <div class="d-flex flex-column bd-highlight justify-content-center align-items-center w-75 ms-5">
+            <h1>Login</h1>
 
-    <div th:if="${error}">
-        Unable to login. Check your username and password.
+            <div th:if="${error}">
+                Unable to login. Check your username and password.
+            </div>
+
+            <p>New here? Click <a th:href="@{/register}">here</a> to register.</p>
+
+            <form method="POST" th:action="@{/login}" id="loginForm">
+                <label class="form-label" for="username">Username: </label>
+                <input
+                        class="form-control"
+                        type="text"
+                        name="username"
+                        id="username"
+                /><br />
+
+                <label class="form-label" for="password">Password: </label>
+                <input
+                        class="form-control"
+                        type="password"
+                        name="password"
+                        id="password"
+                /><br />
+
+                <input class="btn btn-primary mt-5" type="submit" value="Login" />
+            </form>
+            </div>
+        </div>
+    <div class="footer" th:replace="~{fragments/footer :: footer}"></div>
     </div>
-
-    <p>New here? Click <a th:href="@{/register}">here</a> to register.</p>
-
-    <form method="POST" th:action="@{/login}" id="loginForm">
-        <label class="form-label" for="username">Username: </label>
-        <input
-                class="form-control"
-                type="text"
-                name="username"
-                id="username"
-        /><br />
-
-        <label class="form-label" for="password">Password: </label>
-        <input
-                class="form-control"
-                type="password"
-                name="password"
-                id="password"
-        /><br />
-
-        <input class="btn btn-primary mt-5" type="submit" value="Login" />
-    </form>
-</div>
 </body>
 </html>

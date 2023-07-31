@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/clothesList")
                 .hasAnyRole("USER", "ADMIN","EMPLOYEE")
                 .requestMatchers("/manage")
-                .hasRole("EMPLOYEE")
+                .hasRole("ADMIN")
                 .requestMatchers("/clothesForm")
                 .hasAnyRole("ADMIN","EMPLOYEE")
                 .anyRequest().permitAll()
