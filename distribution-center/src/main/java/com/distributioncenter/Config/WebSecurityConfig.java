@@ -7,17 +7,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+import com.distributioncenter.Models.User;
+import com.distributioncenter.Repository.UserRepository;
+
 @Configuration
-@EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -25,33 +29,34 @@ public class WebSecurityConfig {
     }
 
 
-    /*@Bean
-    public UserDetailsService userDetailsService() {
-        PasswordEncoder encoder = passwordEncoder();
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user").password(encoder.encode("userpass")).roles("USER").build());
-        manager.createUser(User.withUsername("employee").password(encoder.encode("employeepass")).roles("EMPLOYEE").build());
-        manager.createUser(User.withUsername("admin").password(encoder.encode("adminpass")).roles("ADMIN").build());
-        return manager;
-    }*/
+    @Bean
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        return username -> {
+            User user = userRepository.findByUsername(username);
+            if (user != null) {
+                return user;
+            }
+            throw new UsernameNotFoundException(username);
+
+        };
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                /*.authorizeHttpRequests()
+                .authorizeHttpRequests()
                 .requestMatchers(toH2Console()).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/admin/**")).hasRole("ADMIN")
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/user/**")).hasRole("USER")
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/employee/**")).hasRole("EMPLOYEE")
-                .anyRequest().authenticated()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("homepage"))
+                .authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                 .defaultSuccessUrl("/design", true)
+                 .defaultSuccessUrl("/homepage", true)
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .and()*/
+                .and()
                 .headers()
                 .frameOptions()
                 .disable();
