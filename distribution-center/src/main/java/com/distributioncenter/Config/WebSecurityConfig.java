@@ -38,16 +38,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //.authorizeHttpRequests()
-                //.requestMatchers(toH2Console()).permitAll()
-                /*.requestMatchers(AntPathRequestMatcher.antMatcher("/api/admin/**")).hasRole("ADMIN")
+                /*.authorizeHttpRequests()
+                .requestMatchers(toH2Console()).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/admin/**")).hasRole("ADMIN")
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/user/**")).hasRole("USER")
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/employee/**")).hasRole("EMPLOYEE")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                //.loginPage("/login")
-                //.defaultSuccessUrl("/design", true)
+                .loginPage("/login")
+                 .defaultSuccessUrl("/design", true)
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
