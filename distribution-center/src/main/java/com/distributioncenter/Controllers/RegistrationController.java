@@ -1,4 +1,4 @@
-package com.distributioncenter.controller;
+package com.distributioncenter.Controllers;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

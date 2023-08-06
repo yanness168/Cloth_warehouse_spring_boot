@@ -1,4 +1,4 @@
-package com.cpan252.tekkenreborn.config;
+package com.distributioncenter.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
