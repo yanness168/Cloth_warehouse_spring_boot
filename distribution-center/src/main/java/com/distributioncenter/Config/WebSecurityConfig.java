@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 
@@ -54,9 +53,9 @@ public class WebSecurityConfig {
                 .loginPage("/login")
                  .defaultSuccessUrl("/homepage", true)
                 .and()
-                .logout()
-                .logoutSuccessUrl("/")
-                .and()
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/logout/success"))
                 .headers()
                 .frameOptions()
                 .disable();
