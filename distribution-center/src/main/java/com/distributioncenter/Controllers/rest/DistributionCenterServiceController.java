@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-import com.distributioncenter.model.Item;
-import com.distributioncenter.model.DistributionCenter;
-import com.distributioncenter.repository.DistributionCenterRepository;
-import com.distributioncenter.repository.ItemRepository;
+import com.distributioncenter.Models.Item;
+import com.distributioncenter.Models.Item.Brand;
+import com.distributioncenter.Models.DistributionCenter;
+import com.distributioncenter.Models.dto.CreateItem;
+import com.distributioncenter.Repository.DistributionCenterRepository;
+import com.distributioncenter.Repository.ItemRepository;
 
 @RestController
 @RequestMapping(path="/api/distribution-center", produces="application/json")
@@ -34,7 +36,7 @@ public class DistributionCenterServiceController {
         this.itemRepository = itemRepository;
     }
 
-    @GetMapping("/all-centers")
+    @GetMapping("/centers")
     public Iterable<DistributionCenter> allDistributionCenters() {
         return distributionCenterRepository.findAll();
     }
@@ -50,14 +52,12 @@ public class DistributionCenterServiceController {
     }
 
     @GetMapping("/items")
-    public Iterable<Item> getItems(@RequestParam("brand") Optional<String> brand,
+    public Iterable<Item> getItems(@RequestParam("brand") Optional<Brand> brand,
                                    @RequestParam("name") Optional<String> name) {
         if (!brand.isPresent() && !name.isPresent()) {
-            return itemRepository.findAll()
+            return itemRepository.findAll();
         } else {
-            return itemRepository.findAll(brand.get(), name.get())
+            return itemRepository.findByBrandAndName(brand.get(), name.get());
         }
     }
-
-
 }

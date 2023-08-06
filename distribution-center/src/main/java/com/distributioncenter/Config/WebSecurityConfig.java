@@ -1,8 +1,12 @@
 package com.distributioncenter.Config;
 
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
@@ -21,7 +25,7 @@ public class WebSecurityConfig {
     }
 
 
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService() {
         PasswordEncoder encoder = passwordEncoder();
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -29,22 +33,34 @@ public class WebSecurityConfig {
         manager.createUser(User.withUsername("employee").password(encoder.encode("employeepass")).roles("EMPLOYEE").build());
         manager.createUser(User.withUsername("admin").password(encoder.encode("adminpass")).roles("ADMIN").build());
         return manager;
-    }
+    }*/
 
-
-    /*@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasRole("USER")
-                        .requestMatchers("/api/employee/**").hasRole("EMPLOYEE")
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(basic -> {})
-                .cors(cors -> {})
-                .csrf(csrf -> csrf.disable())
+                //.authorizeHttpRequests()
+                //.requestMatchers(toH2Console()).permitAll()
+                /*.requestMatchers(AntPathRequestMatcher.antMatcher("/api/admin/**")).hasRole("ADMIN")
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/user/**")).hasRole("USER")
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/employee/**")).hasRole("EMPLOYEE")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                //.loginPage("/login")
+                //.defaultSuccessUrl("/design", true)
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()*/
+                .headers()
+                .frameOptions()
+                .disable();
+
+        http
+                .csrf()
+                .disable()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
-    }*/
+
+    }
 }
