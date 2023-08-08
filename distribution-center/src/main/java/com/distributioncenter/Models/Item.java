@@ -10,11 +10,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-@Entity(name = "item")
+@Entity
+@Table(name="ITEM")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,8 +45,9 @@ public class Item {
 
     private int quantity;
 
+    @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "distribution_centre_id")
+    @JoinColumn(name = "distribution_center_id")
     private DistributionCenter distributionCenter;
 
     public void setDistributionCentre(DistributionCenter distributionCentre) {

@@ -7,14 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "distribution_center")
+@Entity
+@Table(name="DISTRIBUTION_CENTER")
 public class DistributionCenter {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "distribution_center_id")
@@ -23,7 +27,9 @@ public class DistributionCenter {
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @OneToMany(mappedBy = "distributionCenter")
+
+    @JsonManagedReference
+    @OneToMany(mappedBy="distributionCenter", cascade = CascadeType.ALL)
     private List<Item> items;
 
     private double latitude;
