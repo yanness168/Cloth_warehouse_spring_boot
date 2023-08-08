@@ -6,9 +6,7 @@ import com.distributioncenter.Models.DistributionCenter;
 import com.distributioncenter.Models.Item;
 import com.distributioncenter.Models.Item.Brand;
 
-import lombok.Data;
 
-@Data
 public class CreateItem {
     private String name;
 
@@ -20,13 +18,9 @@ public class CreateItem {
 
     private int quantity;
 
+    private DistributionCenter distributionCenter;
+
     public Item toItem() {
-        return Item.builder()
-                .name(this.getName())
-                .brand(this.getBrand())
-                .establishmentYear(this.getEstablishmentYear())
-                .price(this.getPrice())
-                .quantity(this.getQuantity())
-                .build();
+        return new Item(name, brand, establishmentYear, price, quantity, distributionCenter);
     }
 }

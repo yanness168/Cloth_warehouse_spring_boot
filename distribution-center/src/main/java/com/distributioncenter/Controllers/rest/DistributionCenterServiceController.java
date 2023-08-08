@@ -1,6 +1,8 @@
 package com.distributioncenter.Controllers.rest;
 
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 
 import com.distributioncenter.Models.Item;
@@ -35,6 +39,36 @@ public class DistributionCenterServiceController {
         this.distributionCenterRepository = distributionCenterRepository;
         this.itemRepository = itemRepository;
     }
+
+    @GetMapping("/allCenters")
+    public ResponseEntity<List<DistributionCenter>> getAllDistributionCenters() {
+
+        try {
+            List<DistributionCenter> centers = distributionCenterRepository.findAll();
+
+            System.out.println(centers);
+
+            if (centers.isEmpty() || centers.size() == 0) {
+                return new ResponseEntity<List<DistributionCenter>>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<List<DistributionCenter>>(centers, HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/centers/{id}")
+    public ResponseEntity<DistributionCenter> getSingleDistributionCenter(@PathVariable Long id) {
+        Optional<DistributionCenter> center = distributionCenterRepository.findById(id);
+
+        if (center.isPresent()) {
+            return new ResponseEntity<DistributionCenter>(center.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
 
     @GetMapping("/centers")
     public Iterable<DistributionCenter> allDistributionCenters() {
