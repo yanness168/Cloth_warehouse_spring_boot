@@ -50,7 +50,6 @@ public class ManagementController {
     }
 
     // Get all distribution centers from api
-
     @ModelAttribute("distributionCenters")
     public List<DistributionCenterContext> getDistributionCenters() {
         var centers = restTemplate
