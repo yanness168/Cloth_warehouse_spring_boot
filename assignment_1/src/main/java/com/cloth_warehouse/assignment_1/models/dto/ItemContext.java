@@ -40,12 +40,6 @@ public class ItemContext {
 
     private int quantity;
 
-    private DistributionCenterContext distributionCenterContext;
-
-    public void setDistributionCentre(DistributionCenterContext distributionCenterContext) {
-        this.distributionCenterContext = distributionCenterContext;
-    }
-
     public Clothe toClothe() {
         return Clothe.builder()
                 .name(this.getName())
