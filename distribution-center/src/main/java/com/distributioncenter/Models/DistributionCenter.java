@@ -7,26 +7,84 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 
-@Data
-@Builder
+import java.util.List;
+import java.util.ArrayList;
+
+
+@Entity
+@Table(name="DISTRIBUTION_CENTER")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "distribution_center")
 public class DistributionCenter {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "distribution_center_id")
     private Long id;
 
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @OneToMany(mappedBy = "distributionCenter")
+    @OneToMany(
+            mappedBy="distributionCenter",
+            cascade=CascadeType.ALL,
+            orphanRemoval=true
+    )
     private List<Item> items;
 
     private double latitude;
 
     private double longitude;
+
+    public DistributionCenter(String name,
+                              double latitude, double longitude) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    // GETTERS AND SETTERS
+    @JsonManagedReference
+    public List<Item> getItems() {
+        return this.items;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 }

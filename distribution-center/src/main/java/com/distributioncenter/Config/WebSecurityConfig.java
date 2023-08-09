@@ -62,8 +62,7 @@ public class WebSecurityConfig {
 
         http
                 .csrf()
-                .disable()
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .disable();
         return http.build();
 
     }

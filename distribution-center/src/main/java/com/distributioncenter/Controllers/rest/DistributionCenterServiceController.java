@@ -1,6 +1,9 @@
 package com.distributioncenter.Controllers.rest;
 
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
+
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.validation.Valid;
 
@@ -21,9 +32,11 @@ import com.distributioncenter.Models.DistributionCenter;
 import com.distributioncenter.Models.dto.CreateItem;
 import com.distributioncenter.Repository.DistributionCenterRepository;
 import com.distributioncenter.Repository.ItemRepository;
+import com.distributioncenter.Models.dto.DistributionCenterDto;
+
 
 @RestController
-@RequestMapping(path="/api/distribution-center", produces="application/json")
+@RequestMapping(path="/api/distribution-center")
 public class DistributionCenterServiceController {
 
     private final DistributionCenterRepository distributionCenterRepository;
@@ -36,21 +49,24 @@ public class DistributionCenterServiceController {
         this.itemRepository = itemRepository;
     }
 
+    // Get all distribution centers
     @GetMapping("/centers")
     public Iterable<DistributionCenter> allDistributionCenters() {
         return distributionCenterRepository.findAll();
     }
 
-    @PostMapping
-    public Item createItem(@Valid @RequestBody CreateItem item) {
-        return itemRepository.save(item.toItem());
+    // Get distribution center by id
+    @GetMapping("/centers/{id}")
+    public ResponseEntity<DistributionCenter> getSingleDistributionCenter(@PathVariable Long id) {
+        Optional<DistributionCenter> center = distributionCenterRepository.findById(id);
+
+        if (center.isPresent()) {
+            return new ResponseEntity<DistributionCenter>(center.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable("id") Long id) {
-        itemRepository.deleteById(id);
-    }
-
+    // Get all items, OR get items by brand and name
     @GetMapping("/items")
     public Iterable<Item> getItems(@RequestParam("brand") Optional<Brand> brand,
                                    @RequestParam("name") Optional<String> name) {
@@ -61,4 +77,15 @@ public class DistributionCenterServiceController {
         }
     }
 
+    // Add item to item repository
+    @PostMapping
+    public Item createItem(@Valid @RequestBody CreateItem item) {
+        return itemRepository.save(item.toItem());
+    }
+
+    // Delete item from item repository by id
+    @DeleteMapping("items/{id}")
+    public void deleteItem(@PathVariable("id") Long id) {
+        itemRepository.deleteById(id);
+    }
 }

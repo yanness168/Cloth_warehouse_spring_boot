@@ -6,9 +6,7 @@ import com.distributioncenter.Models.DistributionCenter;
 import com.distributioncenter.Models.Item;
 import com.distributioncenter.Models.Item.Brand;
 
-import lombok.Data;
 
-@Data
 public class CreateItem {
     private String name;
 
@@ -20,13 +18,58 @@ public class CreateItem {
 
     private int quantity;
 
+    private DistributionCenter distributionCenter;
+
     public Item toItem() {
-        return Item.builder()
-                .name(this.getName())
-                .brand(this.getBrand())
-                .establishmentYear(this.getEstablishmentYear())
-                .price(this.getPrice())
-                .quantity(this.getQuantity())
-                .build();
+        return new Item(name, brand, establishmentYear, price, quantity, distributionCenter);
+    }
+
+    // GETTERS AND SETTERS
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public int getEstablishmentYear() {
+        return establishmentYear;
+    }
+
+    public void setEstablishmentYear(int establishmentYear) {
+        this.establishmentYear = establishmentYear;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public DistributionCenter getDistributionCenter() {
+        return distributionCenter;
+    }
+
+    public void setDistributionCenter(DistributionCenter distributionCenter) {
+        this.distributionCenter = distributionCenter;
     }
 }

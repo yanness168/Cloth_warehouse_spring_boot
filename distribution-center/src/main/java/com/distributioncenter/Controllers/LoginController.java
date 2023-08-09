@@ -38,6 +38,7 @@ public class LoginController {
             return "redirect:/";
         } else {
             // Credentials don't match, display error message
+            System.out.println("ERROR loging in");
             model.addAttribute("error", "Unable to login. Check your username and password.");
             return "authentication/login";
         }

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -22,10 +24,11 @@
                     align-items: center;
                     height: 80vh;">
     <div class="hero-unit">
-        <h1>Distribution Center API</h1>
-        <p>
-           Welcome to the distribution center API. To view available endpoints, select a tab.
-        </p>
+        <h1>Distribution Center Manager</h1>
+        <div sec:authorize="!isAuthenticated()">
+           <p>Welcome to the distribution center API. To begin login or register to access API endpoints.</p>
+            <a href="/register" th:href="@{/register}" class="btn btn-large btn-success">Register</a>
+        </div>
     </div>
 </div>
 <div class="footer" th:replace="~{fragments/footer :: footer}"></div>

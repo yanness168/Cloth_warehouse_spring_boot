@@ -28,16 +28,38 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <!-- Log In -->
-                <li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/login" th:href="@{/login}">
+                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Login
+                    </a>
+                </li>
+
+                <!-- Sign Up -->
+                <li sec:authorize="!isAuthenticated()">
+                    <a href="/register" th:href="@{/register}">
+                        <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Sign Up
+                    </a>
+                </li>
+
+                <!-- Items API -->
+                <li sec:authorize="isAuthenticated()">
                     <a href="/api/distribution-center/items" th:href="@{/api/distribution-center/items}">
                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;Items
                     </a>
                 </li>
 
-                <!-- Sign Up -->
-                <li>
+                <!-- Distribution Center API -->
+                <li sec:authorize="isAuthenticated()">
                     <a href="/api/distribution-center/centers" th:href="@{/api/distribution-center/centers}">
                         <span class="glyphicon glyphicon-road" aria-hidden="true"></span>&nbsp;Distribution Centers
+                    </a>
+                </li>
+
+
+                <!-- Log Out -->
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/logout" th:href="@{/logout}">
+                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log Out
                     </a>
                 </li>
 
