@@ -54,6 +54,7 @@ public class Item {
         this.name = name;
         this.brand = brand;
         this.establishmentYear = establishmentYear;
+        this.price = price;
         this.quantity = quantity;
         this.distributionCenter = distributionCenter;
     }
@@ -80,4 +81,65 @@ public class Item {
         }
     }
 
+    // GETTERS AND SETTERS
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public com.distributioncenter.Models.Item.Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(com.distributioncenter.Models.Item.Brand brand) {
+        this.brand = brand;
+    }
+
+    public int getEstablishmentYear() {
+        return establishmentYear;
+    }
+
+    public void setEstablishmentYear(int establishmentYear) {
+        this.establishmentYear = establishmentYear;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setDistributionCenter(DistributionCenter distributionCenter) {
+        this.distributionCenter = distributionCenter;
+    }
 }

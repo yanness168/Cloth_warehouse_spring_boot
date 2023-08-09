@@ -3,6 +3,7 @@ package com.distributioncenter.Controllers.rest;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,9 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import jakarta.validation.Valid;
 
 import com.distributioncenter.Models.Item;
@@ -26,8 +33,12 @@ import com.distributioncenter.Models.dto.CreateItem;
 import com.distributioncenter.Repository.DistributionCenterRepository;
 import com.distributioncenter.Repository.ItemRepository;
 
+
+import com.distributioncenter.Models.dto.DistributionCenterDto;
+
+
 @RestController
-@RequestMapping(path="/api/distribution-center", produces="application/json")
+@RequestMapping(path="/api/distribution-center")
 public class DistributionCenterServiceController {
 
     private final DistributionCenterRepository distributionCenterRepository;
@@ -40,24 +51,13 @@ public class DistributionCenterServiceController {
         this.itemRepository = itemRepository;
     }
 
-    @GetMapping("/allCenters")
-    public ResponseEntity<List<DistributionCenter>> getAllDistributionCenters() {
-
-        try {
-            List<DistributionCenter> centers = distributionCenterRepository.findAll();
-
-            System.out.println(centers);
-
-            if (centers.isEmpty() || centers.size() == 0) {
-                return new ResponseEntity<List<DistributionCenter>>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<List<DistributionCenter>>(centers, HttpStatus.OK);
-        } catch(Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    // Get all distribution centers
+    @GetMapping("/centers")
+    public Iterable<DistributionCenter> allDistributionCenters() {
+        return distributionCenterRepository.findAll();
     }
 
+    // Get distribution center by id
     @GetMapping("/centers/{id}")
     public ResponseEntity<DistributionCenter> getSingleDistributionCenter(@PathVariable Long id) {
         Optional<DistributionCenter> center = distributionCenterRepository.findById(id);
@@ -68,23 +68,7 @@ public class DistributionCenterServiceController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
-
-    @GetMapping("/centers")
-    public Iterable<DistributionCenter> allDistributionCenters() {
-        return distributionCenterRepository.findAll();
-    }
-
-    @PostMapping
-    public Item createItem(@Valid @RequestBody CreateItem item) {
-        return itemRepository.save(item.toItem());
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable("id") Long id) {
-        itemRepository.deleteById(id);
-    }
-
+    // Get all items, OR get items by brand and name
     @GetMapping("/items")
     public Iterable<Item> getItems(@RequestParam("brand") Optional<Brand> brand,
                                    @RequestParam("name") Optional<String> name) {
@@ -93,5 +77,17 @@ public class DistributionCenterServiceController {
         } else {
             return itemRepository.findByBrandAndName(brand.get(), name.get());
         }
+    }
+
+    // Add item to item repository
+    @PostMapping
+    public Item createItem(@Valid @RequestBody CreateItem item) {
+        return itemRepository.save(item.toItem());
+    }
+
+    // Delete item from item repository by id
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable("id") Long id) {
+        itemRepository.deleteById(id);
     }
 }
