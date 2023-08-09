@@ -86,7 +86,7 @@ public class DistributionCenterServiceController {
     }
 
     // Delete item from item repository by id
-    @DeleteMapping("/{id}")
+    @DeleteMapping("items/{id}")
     public void deleteItem(@PathVariable("id") Long id) {
         itemRepository.deleteById(id);
     }
