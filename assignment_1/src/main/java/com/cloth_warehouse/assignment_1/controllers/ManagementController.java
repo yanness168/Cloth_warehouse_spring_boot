@@ -3,6 +3,7 @@ package com.cloth_warehouse.assignment_1.controllers;
 import java.util.Arrays;
 import java.util.List;
 import java.util.EnumSet;
+import java.util.Map;
 
 import com.cloth_warehouse.assignment_1.models.User;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,9 @@ import com.cloth_warehouse.assignment_1.models.dto.ItemContext;
 import com.cloth_warehouse.assignment_1.models.dto.ItemByBrandNameDto;
 import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
 import com.cloth_warehouse.assignment_1.models.Location;
+import com.cloth_warehouse.assignment_1.models.Coordinate;
+
+
 
 
 @Controller
@@ -91,17 +95,22 @@ public class ManagementController {
 
         this.filteredItems = Arrays.asList(items);
 
+        List<DistributionCenterContext> centersWithFilteredItem;
+        Map<Long, Coordinate> filteredCentersCoordinates;
+        Coordinate closestCenterCoordinates;
+
         if (!this.filteredItems.isEmpty()) {
-            var centersWithFilteredItem = Location.findAllCentersWithFilteredItem(this.distributionCenters, this.filteredItems);
-            var filteredCentersCoordinates = Location.mapCentersByCoordinatesAndID(centersWithFilteredItem);
-            var closestCenterCoordinates = Location.findClosestCenterCoordinate(filteredCentersCoordinates,
+            centersWithFilteredItem = Location.findAllCentersWithFilteredItem(this.distributionCenters, this.filteredItems);
+            filteredCentersCoordinates = Location.mapCentersByCoordinatesAndID(centersWithFilteredItem);
+            closestCenterCoordinates = Location.findClosestCenterCoordinate(filteredCentersCoordinates,
                     Location.WAREHOUSE_LATITUDE,
                     Location.WAREHOUSE_LONGITUDE);
 
         } else {
             return "error";
         }
-        // model.addAttribute("items", filteredItems);
+        model.addAttribute("closestCoordinate", closestCenterCoordinates);
+        model.addAttribute("filteredItems", filteredItems);
         return "manage";
 
     }

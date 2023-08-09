@@ -9,19 +9,10 @@ import java.util.Map.Entry;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-
 import com.cloth_warehouse.assignment_1.models.dto.DistributionCenterContext;
 import com.cloth_warehouse.assignment_1.models.dto.ItemContext;
+import com.cloth_warehouse.assignment_1.models.Coordinate;
 
-class Coordinate {
-    double latitude;
-    double longitude;
-
-    public Coordinate(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-}
 
 public class Location {
 
@@ -45,14 +36,13 @@ public class Location {
                     .filter(item -> idItemsList.contains(item.getId()))
                     .collect(Collectors.toList());
 
-                System.out.println(centerItemsContainingItemId);
                 if (!centerItemsContainingItemId.isEmpty()) {
                     System.out.println("Center with Item: " + distributionCenter.getName());
+                    System.out.println(centerItemsContainingItemId);
                     centersWithItemId.add(distributionCenter);
                 }
             }
 
-        System.out.println(centersWithItemId);
         return centersWithItemId;
     }
 
