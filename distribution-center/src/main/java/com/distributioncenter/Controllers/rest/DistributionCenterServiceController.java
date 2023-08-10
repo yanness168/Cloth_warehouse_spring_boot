@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.modelmapper.ModelMapper;
 
+import org.modelmapper.ModelMapper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,5 +88,38 @@ public class DistributionCenterServiceController {
     @DeleteMapping("items/{id}")
     public void deleteItem(@PathVariable("id") Long id) {
         itemRepository.deleteById(id);
+    }
+
+    @GetMapping("/items/{id}")
+    public Item updateItemQuantity(@PathVariable("id") Long id) {
+        var itemToUpdate = itemRepository.findById(id).orElseThrow();
+        System.out.println(itemToUpdate);
+        return itemToUpdate;
+    }
+
+    @PutMapping("/items/{id}")
+    public Item updateItem(@PathVariable("id") Long id,
+                           @Valid @RequestBody CreateItem item) {
+        var itemToUpdate = itemRepository.findById(id).orElseThrow();
+        itemToUpdate.setName(item.getName());
+        itemToUpdate.setBrand(item.getBrand());
+        itemToUpdate.setEstablishmentYear(item.getEstablishmentYear());
+        itemToUpdate.setPrice(item.getPrice());
+
+        // Deduct quantity from item
+        try {
+            int newQuantity;
+            if (item.getQuantity() > 0) {
+                newQuantity = item.getQuantity() - 1;
+            } else {
+                newQuantity = 0;
+            }
+
+            itemToUpdate.setQuantity(newQuantity);
+            return itemRepository.save(itemToUpdate);
+        } catch (Exception e) {
+            System.out.println("Error updating item: " + e);
+            return null;
+        }
     }
 }
