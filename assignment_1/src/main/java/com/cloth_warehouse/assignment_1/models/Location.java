@@ -12,16 +12,27 @@ import java.util.LinkedHashMap;
 import com.cloth_warehouse.assignment_1.models.dto.DistributionCenterContext;
 import com.cloth_warehouse.assignment_1.models.dto.ItemContext;
 import com.cloth_warehouse.assignment_1.models.Coordinate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import org.springframework.stereotype.Component;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Component
 public class Location {
-
     // Coordinates of Etobicoke Clothes Warehouse
     public static double WAREHOUSE_LATITUDE = 43.6205;
     public static double WAREHOUSE_LONGITUDE = 79.5132;
 
-    public static List<DistributionCenterContext> findAllCentersWithFilteredItem(List<DistributionCenterContext> distributionCenters,
-                                                       List<ItemContext> filteredItems) {
+    public List<DistributionCenterContext> distributionCenters;
+    public List<ItemContext> filteredItems;
+    public Long closestCenterId;
+
+    public List<DistributionCenterContext> findAllCentersWithFilteredItem() {
 
         List<DistributionCenterContext> centersWithItemId = new ArrayList<DistributionCenterContext>();
 
@@ -46,17 +57,30 @@ public class Location {
         return centersWithItemId;
     }
 
+    public Map<Long, Coordinate> mapCentersByCoordinatesAndID()  {
+        Map<Long, Coordinate> coordinateMap = new HashMap<>();
 
-    public static Coordinate findClosestCenterCoordinate(Map<Long, Coordinate> coordinatesByID, double targetLatitude, double targetLongitude) {
-        if (coordinatesByID == null || coordinatesByID.values().isEmpty()) {
+        for (DistributionCenterContext distributionCenter : this.distributionCenters) {
+            coordinateMap.put(distributionCenter.getId(),
+                    new Coordinate(distributionCenter.getLatitude(),
+                            distributionCenter.getLongitude()));
+        }
+
+        return coordinateMap;
+    }
+
+    public Coordinate findClosestCenterByCoordinate(double targetLatitude,
+                                                                      double targetLongitude) {
+
+        Map<Long, Coordinate> coordinateMap = mapCentersByCoordinatesAndID();
+        if (coordinateMap == null || coordinateMap.values().isEmpty()) {
             throw new IllegalArgumentException("Coordinate list cannot be null or empty");
         }
 
         // Compare with first coordinate entry at first
-        Map<Long, Coordinate>  map = coordinatesByID;
         Coordinate firstValue = null;
 
-        for (Coordinate value : map.values()) {
+        for (Coordinate value : coordinateMap.values()) {
             firstValue = value;
             break; // Only retrieve the first value
         }
@@ -65,7 +89,7 @@ public class Location {
         Coordinate closestCoordinate = firstValue;
         double closestDistance = distanceBetweenCoordinates(targetLatitude, targetLongitude, closestCoordinate.latitude, closestCoordinate.longitude);
 
-        for (Coordinate coordinate : map.values()) {
+        for (Coordinate coordinate : coordinateMap.values()) {
             double distance = distanceBetweenCoordinates(targetLatitude, targetLongitude, coordinate.latitude, coordinate.longitude);
             if (distance < closestDistance) {
                 closestDistance = distance;
@@ -74,28 +98,16 @@ public class Location {
         }
 
         // Get distribution center associated with closest coordinate
-        double closestCenterId = 0;
+        Long closestCenterId = 0L;
 
-        for (Long key : map.keySet()) {
-            if (map.get(key).equals(closestCoordinate)) {
+        for (Long key : coordinateMap.keySet()) {
+            if (coordinateMap.get(key).equals(closestCoordinate)) {
                 closestCenterId = key;
             }
         }
 
-        System.out.println("Closest Center: " +  closestCenterId + " Latitude " + closestCoordinate.latitude + ", Longitude " + closestCoordinate.longitude);
+        this.closestCenterId = closestCenterId;
         return closestCoordinate;
-    }
-
-    public static Map<Long, Coordinate> mapCentersByCoordinatesAndID(List<DistributionCenterContext> distributionCenters)  {
-        Map<Long, Coordinate> coordinateMap = new HashMap<>();
-
-        for (DistributionCenterContext distributionCenter : distributionCenters) {
-            coordinateMap.put(distributionCenter.getId(),
-                    new Coordinate(distributionCenter.getLatitude(),
-                            distributionCenter.getLongitude()));
-        }
-
-        return coordinateMap;
     }
 
     public static double distanceBetweenCoordinates(double lat1, double lon1, double lat2, double lon2) {

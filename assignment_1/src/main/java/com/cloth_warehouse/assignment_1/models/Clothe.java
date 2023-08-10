@@ -41,7 +41,7 @@ public class Clothe {
     private int establishmentYear;
 
     @NotNull(message = "Price is required")
-    @DecimalMin(value = "1000.0", message = "Price must be more than 1000")
+    @DecimalMin(value = "0.0", message = "Price must be more than 0.0")
     private BigDecimal price;
 
     @Builder.Default
