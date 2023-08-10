@@ -4,11 +4,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.cloth_warehouse.assignment_1.models.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpEntity;
+import org.apache.http.client.HttpClient;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,9 +38,7 @@ import com.cloth_warehouse.assignment_1.models.dto.ItemByBrandNameDto;
 import com.cloth_warehouse.assignment_1.models.Clothe.Brand;
 import com.cloth_warehouse.assignment_1.models.Location;
 import com.cloth_warehouse.assignment_1.models.Coordinate;
-
-
-
+import com.cloth_warehouse.assignment_1.repository.ClothesRepository;
 
 @Controller
 @RequestMapping("/manage")
@@ -43,15 +51,22 @@ public class ManagementController {
 
     private List<ItemContext> filteredItems;
 
+    private Location location;
+
+    @Autowired
+    private ClothesRepository clothesRepository;
 
     @Autowired
     public ManagementController(RestTemplate restTemplate,
                                 List<DistributionCenterContext> distributionCenters,
-                                List<ItemContext> filteredItems) {
+                                List<ItemContext> filteredItems,
+                                Location location) {
         this.distributionCenters = distributionCenters;
-        this.restTemplate = restTemplate;
         this.filteredItems = filteredItems;
+        this.location = location;
+        this.restTemplate = restTemplate;
     }
+
 
     @ModelAttribute
     public void clothesByBrandName(Model model) {
@@ -95,25 +110,40 @@ public class ManagementController {
 
         this.filteredItems = Arrays.asList(items);
 
-        List<DistributionCenterContext> centersWithFilteredItem;
-        Map<Long, Coordinate> filteredCentersCoordinates;
-        Coordinate closestCenterCoordinates;
-
         if (!this.filteredItems.isEmpty()) {
-            centersWithFilteredItem = Location.findAllCentersWithFilteredItem(this.distributionCenters, this.filteredItems);
-            filteredCentersCoordinates = Location.mapCentersByCoordinatesAndID(centersWithFilteredItem);
-            closestCenterCoordinates = Location.findClosestCenterCoordinate(filteredCentersCoordinates,
+            location.distributionCenters = this.distributionCenters;
+            location.filteredItems = this.filteredItems;
+            Coordinate closestCenterCoordinates = location.findClosestCenterByCoordinate(
                     Location.WAREHOUSE_LATITUDE,
                     Location.WAREHOUSE_LONGITUDE);
 
+            var closestDistributionCenter = restTemplate
+                    .getForObject("http://localhost:8082/api/distribution-center/centers/" +
+                            location.closestCenterId, DistributionCenterContext.class);
+
+            String filteredItemName = this.filteredItems.get(0).getName();
+            ItemContext clothesItem = closestDistributionCenter.getItems().stream()
+                                        .filter(name -> filteredItemName.equals(name.getName()))
+                                        .findAny()
+                                        .orElse(null);
+
+            updateInventoryAndWarehouse(clothesItem);
+
+            return "redirect:/clothesList";
         } else {
             return "error";
         }
-        model.addAttribute("closestCoordinate", closestCenterCoordinates);
-        model.addAttribute("filteredItems", filteredItems);
-        return "manage";
 
     }
 
+    private void updateInventoryAndWarehouse(ItemContext item) {
+        // Update warehouse with item
+        var clothe = item.toClothe();
+        clothesRepository.save(clothe);
 
+        // Deduct quantity from inventory of distribution center
+        Map<String, Long> params = new HashMap<String, Long>();
+        params.put("id", item.getId());
+        restTemplate.put("http://localhost:8082/api/distribution-center/items/{id}", item, params);
+    }
 }
