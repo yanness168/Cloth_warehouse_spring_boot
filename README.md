@@ -1,6 +1,6 @@
 # Cloth Warehouse Management System
 
-This Spring Boot project is a comprehensive warehouse management system designed to streamline the operations of a cloth warehouse. It provides functionalities for managing inventory, tracking orders, and generating reports, aligning with industry needs for efficient inventory management and data-driven decision-making (as highlighted in the IBM job description for a "Student Data and AI Developer").
+This Spring Boot project is a comprehensive warehouse management system designed to streamline the operations of a cloth warehouse. It provides functionalities for managing inventory, tracking orders, and generating reports.
 
 ## Features
 
@@ -45,7 +45,3 @@ This Spring Boot project is a comprehensive warehouse management system designed
 ## Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or open issues.
-
-## License
-
-This project is licensed under the MIT License.
